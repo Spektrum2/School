@@ -34,8 +34,8 @@ public class FacultyController {
     }
 
     @GetMapping("/color/{color}")
-    public ResponseEntity<Collection<Faculty>> searchByColor(@PathVariable String color) {
-        List<Faculty> facultiesAge = new ArrayList<>(facultyService.searchByColor(color));
+    public ResponseEntity<Collection<Faculty>> findByColor(@PathVariable String color) {
+        List<Faculty> facultiesAge = new ArrayList<>(facultyService.findByColor(color));
         if (facultiesAge.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -58,10 +58,8 @@ public class FacultyController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Faculty> deleteFaculty(@PathVariable Long id) {
-        Faculty faculty = facultyService.deleteFaculty(id);
-        if (faculty == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(faculty);
+        facultyService.deleteFaculty(id);
+
+        return ResponseEntity.ok().build();
     }
 }

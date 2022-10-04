@@ -33,8 +33,8 @@ public class StudentController {
     }
 
     @GetMapping("/age/{age}")
-    public ResponseEntity<Collection<Student>> searchByAge(@PathVariable Integer age) {
-        List<Student> studentsAge = new ArrayList<>(studentService.searchByAge(age));
+    public ResponseEntity<Collection<Student>> findByAge(@PathVariable Integer age) {
+        List<Student> studentsAge = new ArrayList<>(studentService.findByAge(age));
         if (studentsAge.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -58,10 +58,7 @@ public class StudentController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable Long id){
-        Student student = studentService.deleteStudent(id);
-        if (student == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(student);
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok().build();
     }
 }
