@@ -6,6 +6,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,15 +39,18 @@ public class FacultyController {
         return facultyService.findByColor(color);
     }
 
-    @GetMapping(params = "id")
-    public List<Student> findStudentsByFaculty(@RequestParam Long id) {
-        return facultyService.findStudentsByFaculty(id);
+    @GetMapping("{id}/students")
+    public ResponseEntity<List<Student>> findStudentsByFaculty(@PathVariable Long id) {
+        List<Student> students = new ArrayList<>(facultyService.findStudentsByFaculty(id));
+        if (students.isEmpty()) {
+            ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(students);
     }
 
-    @GetMapping(params = {"name", "color"})
-    public List<Faculty> findByNameOrColor(@RequestParam String name,
-                                           @RequestParam String color) {
-        return facultyService.findByNameOrColor(name, color);
+    @GetMapping(params = {"nameOrColor"})
+    public List<Faculty> findByNameOrColor(@RequestParam String nameOrColor) {
+        return facultyService.findByNameOrColor(nameOrColor);
     }
 
     @PostMapping

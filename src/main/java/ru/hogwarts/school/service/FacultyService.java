@@ -5,6 +5,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,12 +42,16 @@ public class FacultyService {
         return facultyRepository.findByColor(color);
     }
 
-    public List<Faculty> findByNameOrColor(String name, String color) {
-        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(name,color);
+    public List<Faculty> findByNameOrColor(String nameOrColor) {
+        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(nameOrColor, nameOrColor);
     }
 
     public List<Student> findStudentsByFaculty(long id) {
         Faculty faculty = findFaculty(id);
-        return faculty.getStudents();
+        List<Student> students = new ArrayList<>();
+        if (faculty != null) {
+            return faculty.getStudents();
+        }
+        return students;
     }
 }
