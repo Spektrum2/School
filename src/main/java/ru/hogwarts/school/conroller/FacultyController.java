@@ -6,7 +6,6 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,12 +39,8 @@ public class FacultyController {
     }
 
     @GetMapping("{id}/students")
-    public ResponseEntity<List<Student>> findStudentsByFaculty(@PathVariable Long id) {
-        List<Student> students = new ArrayList<>(facultyService.findStudentsByFaculty(id));
-        if (students.isEmpty()) {
-            ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(students);
+    public List<Student> findStudentsByFaculty(@PathVariable Long id) {
+        return facultyService.findStudentsByFaculty(id);
     }
 
     @GetMapping(params = {"nameOrColor"})
