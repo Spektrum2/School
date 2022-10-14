@@ -19,8 +19,8 @@ public class StudentController {
     }
 
     @GetMapping
-    public Collection<Student> getAllStudent() {
-        return studentService.getAllStudent();
+    public Collection<Student> getAllStudents() {
+        return studentService.getAllStudents();
     }
 
     @GetMapping("{id}")

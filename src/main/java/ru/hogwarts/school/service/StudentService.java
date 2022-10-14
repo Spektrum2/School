@@ -17,7 +17,7 @@ public class StudentService {
     }
 
 
-    public Collection<Student> getAllStudent() {
+    public Collection<Student> getAllStudents() {
         return studentRepository.findAll();
     }
 
@@ -30,6 +30,9 @@ public class StudentService {
     }
 
     public Student editStudent(Student student) {
+        if (findStudent(student.getId()) == null) {
+            return null;
+        }
         return studentRepository.save(student);
     }
 

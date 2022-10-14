@@ -31,6 +31,9 @@ public class FacultyService {
     }
 
     public Faculty editFaculty(Faculty faculty) {
+        if (findFaculty(faculty.getId()) == null) {
+            return null;
+        }
         return facultyRepository.save(faculty);
     }
 
@@ -49,9 +52,9 @@ public class FacultyService {
     public List<Student> findStudentsByFaculty(long id) {
         Faculty faculty = findFaculty(id);
         List<Student> students = new ArrayList<>();
-        if (faculty != null) {
-            return faculty.getStudents();
+        if (faculty == null) {
+            return students;
         }
-        return students;
+        return faculty.getStudents();
     }
 }
