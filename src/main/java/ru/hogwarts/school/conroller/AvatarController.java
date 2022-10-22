@@ -30,7 +30,7 @@ public class AvatarController {
     @GetMapping("/{id}/from-db")
     public ResponseEntity<byte[]> readAvatarFromDb(@PathVariable long id) {
         Pair<String, byte[]> pair = avatarService.readAvatarFromDb(id);
-        return  ResponseEntity.ok()
+        return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(pair.getFirst()))
                 .contentLength(pair.getSecond().length)
                 .body(pair.getSecond());
@@ -39,7 +39,7 @@ public class AvatarController {
     @GetMapping("/{id}/from-fs")
     public ResponseEntity<byte[]> readAvatarFromFs(@PathVariable long id) throws IOException {
         Pair<String, byte[]> pair = avatarService.readAvatarFromFs(id);
-        return  ResponseEntity.ok()
+        return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(pair.getFirst()))
                 .contentLength(pair.getSecond().length)
                 .body(pair.getSecond());
@@ -47,7 +47,7 @@ public class AvatarController {
 
     @GetMapping
     public Collection<AvatarRecord> readAllAvatar(@RequestParam("page") Integer pageNumber,
-                                                  @RequestParam("size") Integer pageSize){
+                                                  @RequestParam("size") Integer pageSize) {
         return avatarService.readAllAvatar(pageNumber, pageSize);
     }
 }

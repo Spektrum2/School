@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.hogwarts.school.entity.AverageAgeOfStudents;
 import ru.hogwarts.school.entity.LastFiveStudents;
 import ru.hogwarts.school.entity.NumberOfStudents;
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.entity.StudentView;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
@@ -29,7 +29,7 @@ public class InfoByStudentsController {
     }
 
     @GetMapping("last-five-students")
-    public Collection<LastFiveStudents> getLastFiveStudents() {
+    public Collection<StudentView> getLastFiveStudents() {
         return studentService.getLastFiveStudents();
     }
 }

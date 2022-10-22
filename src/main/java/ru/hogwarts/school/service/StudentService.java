@@ -5,6 +5,7 @@ import ru.hogwarts.school.component.RecordMapper;
 import ru.hogwarts.school.entity.AverageAgeOfStudents;
 import ru.hogwarts.school.entity.LastFiveStudents;
 import ru.hogwarts.school.entity.NumberOfStudents;
+import ru.hogwarts.school.entity.StudentView;
 import ru.hogwarts.school.exception.AvatarNotFoundException;
 import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Avatar;
@@ -116,7 +117,7 @@ public class StudentService {
         return studentRepository.getAverageAgeOfStudents();
     }
 
-    public Collection<LastFiveStudents> getLastFiveStudents() {
+    public Collection<StudentView> getLastFiveStudents() {
         return studentRepository.getLastFiveStudents();
     }
 
