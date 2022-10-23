@@ -14,7 +14,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.hogwarts.school.component.RecordMapper;
-import ru.hogwarts.school.conroller.FacultyController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.record.FacultyRecord;
 import ru.hogwarts.school.repository.FacultyRepository;

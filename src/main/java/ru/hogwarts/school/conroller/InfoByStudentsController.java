@@ -3,12 +3,11 @@ package ru.hogwarts.school.conroller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.hogwarts.school.entity.AverageAgeOfStudents;
-import ru.hogwarts.school.entity.LastFiveStudents;
 import ru.hogwarts.school.entity.NumberOfStudents;
-import ru.hogwarts.school.entity.StudentView;
+import ru.hogwarts.school.record.StudentRecord;
 import ru.hogwarts.school.service.StudentService;
 
-import java.util.Collection;
+import java.util.List;
 
 @RestController
 public class InfoByStudentsController {
@@ -29,7 +28,7 @@ public class InfoByStudentsController {
     }
 
     @GetMapping("last-five-students")
-    public Collection<StudentView> getLastFiveStudents() {
+    public List<StudentRecord> getLastFiveStudents() {
         return studentService.getLastFiveStudents();
     }
 }

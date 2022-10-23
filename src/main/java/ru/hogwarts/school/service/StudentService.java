@@ -3,13 +3,10 @@ package ru.hogwarts.school.service;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.component.RecordMapper;
 import ru.hogwarts.school.entity.AverageAgeOfStudents;
-import ru.hogwarts.school.entity.LastFiveStudents;
 import ru.hogwarts.school.entity.NumberOfStudents;
-import ru.hogwarts.school.entity.StudentView;
 import ru.hogwarts.school.exception.AvatarNotFoundException;
 import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Avatar;
-import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.record.FacultyRecord;
 import ru.hogwarts.school.record.StudentRecord;
@@ -18,6 +15,7 @@ import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,8 +45,8 @@ public class StudentService {
     public StudentRecord createStudent(StudentRecord studentRecord) {
         Student student = recordMapper.toEntity(studentRecord);
         student.setFaculty(
-                Optional.ofNullable(student.getFaculty())
-                        .map(Faculty::getId)
+                Optional.ofNullable(studentRecord.getFaculty())
+                        .map(FacultyRecord::getId)
                         .flatMap(facultyRepository::findById)
                         .orElse(null)
         );
@@ -117,8 +115,10 @@ public class StudentService {
         return studentRepository.getAverageAgeOfStudents();
     }
 
-    public Collection<StudentView> getLastFiveStudents() {
-        return studentRepository.getLastFiveStudents();
+    public List<StudentRecord> getLastFiveStudents() {
+        return studentRepository.getLastFiveStudents().stream()
+                .map(recordMapper::toRecord)
+                .collect(Collectors.toList());
     }
 
 }
