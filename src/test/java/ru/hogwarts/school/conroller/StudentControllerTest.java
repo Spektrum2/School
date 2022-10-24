@@ -17,7 +17,7 @@ import ru.hogwarts.school.record.StudentRecord;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,8 +41,8 @@ class StudentControllerTest {
 
     @AfterEach
     public void afterEach() {
-        studentRepository.deleteAll();
-        facultyRepository.deleteAll();
+//        studentRepository.deleteAll();
+//        facultyRepository.deleteAll();
     }
 
     @Test
@@ -80,13 +80,14 @@ class StudentControllerTest {
     @Test
     public void findByAgeBetween() {
         List<FacultyRecord> facultyRecords = Stream.generate(this::generateFaculty)
-                .limit(5)
+                .limit(4)
                 .map(this::addFaculty)
                 .toList();
         List<StudentRecord> studentRecords = Stream.generate(() -> generateStudent(facultyRecords.get(faker.random().nextInt(facultyRecords.size()))))
                 .limit(50)
                 .map(this::addStudent)
                 .toList();
+
 
         int min = 18;
         int max = 23;
@@ -107,7 +108,6 @@ class StudentControllerTest {
                 .hasSize(expectedStudents.size())
                 .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrderElementsOf(expectedStudents);
-
     }
 
     private StudentRecord generateStudent(FacultyRecord facultyRecord) {
