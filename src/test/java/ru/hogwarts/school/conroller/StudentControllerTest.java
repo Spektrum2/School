@@ -41,8 +41,8 @@ class StudentControllerTest {
 
     @AfterEach
     public void afterEach() {
-//        studentRepository.deleteAll();
-//        facultyRepository.deleteAll();
+        studentRepository.deleteAll();
+        facultyRepository.deleteAll();
     }
 
     @Test
