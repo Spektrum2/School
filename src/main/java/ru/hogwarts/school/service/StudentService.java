@@ -121,4 +121,10 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
+    public List<StudentRecord> getStudentsByName(String name) {
+        return studentRepository.findStudentsByName(name).stream()
+                .map(recordMapper::toRecord)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -48,6 +48,11 @@ public class StudentController {
         return studentService.findFacultyByStudent(id);
     }
 
+    @GetMapping("/name/{name}")
+    public Collection<StudentRecord> getStudentsByName(@PathVariable String name) {
+        return studentService.getStudentsByName(name);
+    }
+
     @PutMapping("{id}")
     public StudentRecord editStudent(@PathVariable Long id,
                                      @RequestBody @Valid StudentRecord studentRecord) {
