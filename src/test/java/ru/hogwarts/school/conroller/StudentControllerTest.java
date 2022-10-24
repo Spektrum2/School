@@ -78,7 +78,7 @@ class StudentControllerTest {
     }
 
     @Test
-    public void findByAgeBetween() {
+    public void findTests() {
         List<FacultyRecord> facultyRecords = Stream.generate(this::generateFaculty)
                 .limit(4)
                 .map(this::addFaculty)
@@ -87,13 +87,20 @@ class StudentControllerTest {
                 .limit(50)
                 .map(this::addStudent)
                 .toList();
-
+        StudentRecord studentRecord = studentRecords.get(0);
 
         int min = 18;
         int max = 23;
+        int age = 20;
 
-        List<StudentRecord> expectedStudents = studentRecords.stream()
+        List<StudentRecord> expectedStudents1 = studentRecords.stream()
                 .filter(s -> s.getAge() >= min && s.getAge() <= max)
+                .toList();
+        List<StudentRecord> expectedStudents2 = studentRecords.stream()
+                .filter(s -> s.getAge() == age)
+                .toList();
+        List<StudentRecord> expectedStudents3 = studentRecords.stream()
+                .filter(s -> s.getName().equals(studentRecord.getName()))
                 .toList();
         ResponseEntity<List<StudentRecord>> getRecordResponseEntity = testRestTemplate.exchange(
                 "http://localhost:" + port + "/student?min={min}&max={max}",
@@ -105,10 +112,57 @@ class StudentControllerTest {
                 max);
         assertThat(getRecordResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(getRecordResponseEntity.getBody())
-                .hasSize(expectedStudents.size())
+                .hasSize(expectedStudents1.size())
                 .usingRecursiveFieldByFieldElementComparator()
-                .containsExactlyInAnyOrderElementsOf(expectedStudents);
+                .containsExactlyInAnyOrderElementsOf(expectedStudents1);
+
+        ResponseEntity<List<StudentRecord>> getAllRecordResponseEntity = testRestTemplate.exchange(
+                "http://localhost:" + port + "/student",
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+
+        assertThat(getAllRecordResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(getAllRecordResponseEntity.getBody())
+                .hasSize(studentRecords.size())
+                .usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyInAnyOrderElementsOf(studentRecords);
+
+        ResponseEntity<List<StudentRecord>> getAgeRecordResponseEntity = testRestTemplate.exchange(
+                "http://localhost:" + port + "/student?age={age}",
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                },
+                age);
+
+        assertThat(getAgeRecordResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(getAgeRecordResponseEntity.getBody())
+                .hasSize(expectedStudents2.size())
+                .usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyInAnyOrderElementsOf(expectedStudents2);
+
+        ResponseEntity<FacultyRecord> getFacultyRecordResponseEntity = testRestTemplate.getForEntity("http://localhost:" + port + "/student/"+ studentRecord.getId() + "/faculty", FacultyRecord.class);
+
+        assertThat(getFacultyRecordResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(getFacultyRecordResponseEntity.getBody()).isNotNull();
+        assertThat(getFacultyRecordResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(studentRecord.getFaculty());
+
+        ResponseEntity<List<StudentRecord>> getNameRecordResponseEntity = testRestTemplate.exchange(
+                "http://localhost:" + port + "/student/name/" + studentRecord.getName(),
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                });
+
+        assertThat(getNameRecordResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(getNameRecordResponseEntity.getBody())
+                .hasSize(expectedStudents3.size())
+                .usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyInAnyOrderElementsOf(expectedStudents3);
     }
+
 
     private StudentRecord generateStudent(FacultyRecord facultyRecord) {
         StudentRecord studentRecord = new StudentRecord();
