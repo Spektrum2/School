@@ -163,6 +163,26 @@ class StudentControllerTest {
                 .containsExactlyInAnyOrderElementsOf(expectedStudents3);
     }
 
+    @Test
+    public void deleteStudent() {
+        FacultyRecord facultyRecord = addFaculty(generateFaculty());
+        StudentRecord studentRecord = addStudent(generateStudent(facultyRecord));
+
+        ResponseEntity<StudentRecord> recordResponseEntity = testRestTemplate.exchange(
+                "http://localhost:" + port + "/student/" + studentRecord.getId(),
+                HttpMethod.DELETE,
+                new HttpEntity<>(studentRecord),
+                StudentRecord.class
+        );
+
+        assertThat(recordResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(recordResponseEntity.getBody()).isNotNull();
+        assertThat(recordResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(studentRecord);
+        assertThat(recordResponseEntity.getBody().getFaculty()).usingRecursiveComparison().isEqualTo(facultyRecord);
+
+
+    }
+
 
     private StudentRecord generateStudent(FacultyRecord facultyRecord) {
         StudentRecord studentRecord = new StudentRecord();
