@@ -37,10 +37,10 @@ CREATE TABLE student
 
 -- changeset aboturlov:4
 -- preconditions onFail:MARK_RAN onError:MARK_RAN
--- precondition-sql-check expectedResult:0 SELECT count(*) FROM pg_indexes WHERE tablename = 'student' AND indexdef LIKE '%name%'
+-- precondition-sql-check expectedResult:0 SELECT count(*) FROM pg_indexes WHERE tablename = 'student' AND indexname = 'student_name_index'
 CREATE INDEX student_name_index ON student (name);
 
 -- changeset aboturlov:5
 -- preconditions onFail:MARK_RAN onError:MARK_RAN
--- precondition-sql-check expectedResult:0 SSELECT count(*) FROM pg_indexes WHERE tablename = 'faculty' AND indexdef LIKE '%name, color%'
+-- precondition-sql-check expectedResult:0 SELECT count(*) FROM pg_indexes WHERE tablename = 'faculty' AND indexname = 'faculty_name_color_index'
 CREATE INDEX faculty_name_color_index ON faculty (name, color);
