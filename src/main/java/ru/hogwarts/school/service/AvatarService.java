@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,10 +25,11 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class AvatarService {
+    Logger logger = LoggerFactory.getLogger(AvatarService.class);
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 
-    private RecordMapper recordMapper;
+    private final RecordMapper recordMapper;
     private final AvatarRepository avatarRepository;
 
     public AvatarService(RecordMapper recordMapper, AvatarRepository avatarRepository) {
@@ -35,6 +38,7 @@ public class AvatarService {
     }
 
     public void uploadAvatar(MultipartFile multipartFile) throws IOException {
+        logger.info("Was invoked method for upload avatar");
         byte[] data = multipartFile.getBytes();
         Avatar avatar = create(multipartFile.getSize(), multipartFile.getContentType(), data);
 
@@ -50,6 +54,7 @@ public class AvatarService {
     }
 
     private Avatar create(long size, String contentType, byte[] data) {
+        logger.info("Was invoked method for create avatar");
         Avatar avatar = new Avatar();
         avatar.setData(data);
         avatar.setFileSize(size);
@@ -58,16 +63,27 @@ public class AvatarService {
     }
 
     public Pair<String, byte[]> readAvatarFromDb(long id) {
-        Avatar avatar = avatarRepository.findById(id).orElseThrow(() -> new AvatarNotFoundException(id));
+        logger.info("Was invoked method for read avatar from db");
+        Avatar avatar = avatarRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("There is not avatar with id = {}", id);
+                    return new AvatarNotFoundException(id);
+                });
         return Pair.of(avatar.getMediaType(), avatar.getData());
     }
 
     public Pair<String, byte[]> readAvatarFromFs(long id) throws IOException {
-        Avatar avatar = avatarRepository.findById(id).orElseThrow(() -> new AvatarNotFoundException(id));
+        logger.info("Was invoked method for read avatar from fs");
+        Avatar avatar = avatarRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("There is not avatar with id = {}", id);
+                    return new AvatarNotFoundException(id);
+                });
         return Pair.of(avatar.getMediaType(), Files.readAllBytes(Paths.get(avatar.getFilePath())));
     }
 
     public Collection<AvatarRecord> readAllAvatar(int pageNumber, int pageSize) {
+        logger.info("Was invoked method for get all avatars page by page");
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return avatarRepository.findAll(pageRequest).stream()
                 .map(recordMapper::toRecord)
