@@ -13,7 +13,7 @@ public class InfoController {
         this.infoService = infoService;
     }
 
-    @GetMapping
+    @GetMapping("getPort")
     public String getPort() {
         return infoService.getPort();
     }
