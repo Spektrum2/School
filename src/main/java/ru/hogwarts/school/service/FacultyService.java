@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class FacultyService {
-    Logger logger = LoggerFactory.getLogger(FacultyService.class);
+    private final Logger logger = LoggerFactory.getLogger(FacultyService.class);
     private final FacultyRepository facultyRepository;
     private final RecordMapper recordMapper;
 
