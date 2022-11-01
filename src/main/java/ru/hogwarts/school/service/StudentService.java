@@ -159,10 +159,12 @@ public class StudentService {
     @TrackExecutionTime
     public Collection<String> getNamesOfStudentsByLatterA() {
         return studentRepository.findAll().stream()
-                .filter(s -> s.getName().startsWith("A"))
                 .map(recordMapper::toRecord)
                 .map(StudentRecord::getName)
-                .collect(Collectors.toCollection(TreeSet::new));
+                .map(String::toUpperCase)
+                .filter(s -> s.startsWith("A"))
+                .sorted()
+                .collect(Collectors.toList());
     }
     @TrackExecutionTime
     public double getAverageAgeOfStudentsViaStream() {
