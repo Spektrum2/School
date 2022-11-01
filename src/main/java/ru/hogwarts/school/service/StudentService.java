@@ -17,11 +17,8 @@ import ru.hogwarts.school.repository.AvatarRepository;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -160,8 +157,8 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
     @TrackExecutionTime
-    public TreeSet<String> getNamesOfStudentsByLatterA() {
-        return studentRepository.findAll().stream().parallel()
+    public Collection<String> getNamesOfStudentsByLatterA() {
+        return studentRepository.findAll().stream()
                 .filter(s -> s.getName().startsWith("A"))
                 .map(recordMapper::toRecord)
                 .map(StudentRecord::getName)
