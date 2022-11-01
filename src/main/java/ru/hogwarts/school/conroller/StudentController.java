@@ -53,6 +53,16 @@ public class StudentController {
         return studentService.getStudentsByName(name);
     }
 
+    @GetMapping("name")
+    public Collection<String> getNamesOfStudentsByLatterA() {
+        return studentService.getNamesOfStudentsByLatterA();
+    }
+
+    @GetMapping("averageAge")
+    public Double getAverageAgeOfStudentsViaStream() {
+        return studentService.getAverageAgeOfStudentsViaStream();
+    }
+
     @PutMapping("{id}")
     public StudentRecord editStudent(@PathVariable Long id,
                                      @RequestBody @Valid StudentRecord studentRecord) {

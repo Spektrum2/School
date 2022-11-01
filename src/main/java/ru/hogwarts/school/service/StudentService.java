@@ -3,6 +3,7 @@ package ru.hogwarts.school.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.aop.TrackExecutionTime;
 import ru.hogwarts.school.component.RecordMapper;
 import ru.hogwarts.school.entity.AverageAgeOfStudents;
 import ru.hogwarts.school.entity.NumberOfStudents;
@@ -20,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -144,9 +146,9 @@ public class StudentService {
         return studentRepository.getAverageAgeOfStudents();
     }
 
-    public List<StudentRecord> getLastFiveStudents() {
+    public List<StudentRecord> getLastStudents(int count) {
         logger.info("Was invoked method for get last five students");
-        return studentRepository.getLastFiveStudents().stream()
+        return studentRepository.getLastStudents(count).stream()
                 .map(recordMapper::toRecord)
                 .collect(Collectors.toList());
     }
@@ -156,6 +158,22 @@ public class StudentService {
         return studentRepository.findStudentsByName(name).stream()
                 .map(recordMapper::toRecord)
                 .collect(Collectors.toList());
+    }
+    @TrackExecutionTime
+    public TreeSet<String> getNamesOfStudentsByLatterA() {
+        return studentRepository.findAll().stream().parallel()
+                .filter(s -> s.getName().startsWith("A"))
+                .map(recordMapper::toRecord)
+                .map(StudentRecord::getName)
+                .collect(Collectors.toCollection(TreeSet::new));
+    }
+    @TrackExecutionTime
+    public double getAverageAgeOfStudentsViaStream() {
+        return studentRepository.findAll().stream()
+                .map(recordMapper::toRecord)
+                .mapToInt(StudentRecord::getAge)
+                .average()
+                .orElse(0);
     }
 
 }

@@ -3,6 +3,7 @@ package ru.hogwarts.school.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.aop.TrackExecutionTime;
 import ru.hogwarts.school.component.RecordMapper;
 import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.model.Faculty;
@@ -11,6 +12,7 @@ import ru.hogwarts.school.record.StudentRecord;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 
@@ -96,5 +98,13 @@ public class FacultyService {
                     logger.error("There is not faculty with id = {}", id);
                     return new FacultyNotFoundException(id);
                 });
+    }
+    @TrackExecutionTime
+    public String getTheLongestNameOfFaculty() {
+        return facultyRepository.findAll().stream()
+                .map(recordMapper::toRecord)
+                .map(FacultyRecord::getName)
+                .max(Comparator.comparingInt(String::length))
+                .orElse(null);
     }
 }

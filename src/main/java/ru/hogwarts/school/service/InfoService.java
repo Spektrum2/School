@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.aop.TrackExecutionTime;
+
+import java.util.stream.IntStream;
 
 @Service
 public class InfoService {
@@ -14,5 +17,11 @@ public class InfoService {
     public String getPort() {
         logger.debug("Server port request");
         return "Server port = " + port;
+    }
+
+    @TrackExecutionTime
+    public Integer getNumber() {
+        return IntStream.rangeClosed(1, 1_000_000)
+                .reduce(0, Integer::sum);
     }
 }

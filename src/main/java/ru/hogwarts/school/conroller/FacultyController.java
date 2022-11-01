@@ -1,7 +1,6 @@
 package ru.hogwarts.school.conroller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.school.model.Faculty;
 
 import ru.hogwarts.school.record.FacultyRecord;
 import ru.hogwarts.school.record.StudentRecord;
@@ -48,6 +47,11 @@ public class FacultyController {
     @GetMapping(params = {"nameOrColor"})
     public Collection<FacultyRecord> findByNameOrColor(@RequestParam String nameOrColor) {
         return facultyService.findByNameOrColor(nameOrColor);
+    }
+
+    @GetMapping("theLongestName")
+    public String getTheLongestNameOfFaculty() {
+        return facultyService.getTheLongestNameOfFaculty();
     }
 
     @PutMapping({"{id}"})
