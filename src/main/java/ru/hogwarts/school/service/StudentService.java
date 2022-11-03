@@ -2,6 +2,7 @@ package ru.hogwarts.school.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.aop.TrackExecutionTime;
 import ru.hogwarts.school.component.RecordMapper;
@@ -22,6 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@EnableAsync
 public class StudentService {
     private final Logger logger = LoggerFactory.getLogger(StudentService.class);
     private final StudentRepository studentRepository;
@@ -113,7 +115,7 @@ public class StudentService {
 
     public FacultyRecord findFacultyByStudent(long id) {
         logger.info("Was invoked method for find faculty by student");
-    return findStudent(id).getFaculty();
+        return findStudent(id).getFaculty();
     }
 
     public StudentRecord patchStudentAvatar(long id, long avatarId) {
@@ -156,6 +158,7 @@ public class StudentService {
                 .map(recordMapper::toRecord)
                 .collect(Collectors.toList());
     }
+
     @TrackExecutionTime
     public Collection<String> getNamesOfStudentsByLatterA() {
         return studentRepository.findAll().stream()
@@ -166,6 +169,7 @@ public class StudentService {
                 .sorted()
                 .collect(Collectors.toList());
     }
+
     @TrackExecutionTime
     public double getAverageAgeOfStudentsViaStream() {
         return studentRepository.findAll().stream()
@@ -175,4 +179,41 @@ public class StudentService {
                 .orElse(0);
     }
 
+    public void getThreads() {
+        logger.info("Threads");
+        List<StudentRecord> students = studentRepository.findAll().stream()
+                .map(recordMapper::toRecord)
+                .toList();
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+        new Thread(() -> {
+            System.out.println(students.get(2).getName());
+            System.out.println(students.get(3).getName());
+        }).start();
+        new Thread(() -> {
+            System.out.println(students.get(4).getName());
+            System.out.println(students.get(5).getName());
+        }).start();
+    }
+
+    public void getSynchronizedThreads() {
+        logger.info("SynchronizedThreads");
+        operation(0);
+        operation(1);
+        new Thread(() -> {
+            operation(2);
+            operation(3);
+        }).start();
+        new Thread(() -> {
+            operation(4);
+            operation(5);
+        }).start();
+    }
+
+    private synchronized void operation(int key) {
+        List<StudentRecord> students = studentRepository.findAll().stream()
+                .map(recordMapper::toRecord)
+                .toList();
+        System.out.println(students.get(key).getName());
+    }
 }

@@ -63,11 +63,21 @@ public class StudentController {
         return studentService.getAverageAgeOfStudentsViaStream();
     }
 
+    @GetMapping("getTreads")
+    public void getTreads() {
+        studentService.getThreads();
+    }
+
+    @GetMapping("getSynchronizedThreads")
+    public void getSynchronizedThreads() {
+        studentService.getSynchronizedThreads();
+    }
+
+
     @PutMapping("{id}")
     public StudentRecord editStudent(@PathVariable Long id,
                                      @RequestBody @Valid StudentRecord studentRecord) {
         return studentService.editStudent(id, studentRecord);
-
     }
 
     @DeleteMapping("{id}")
