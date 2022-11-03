@@ -31,7 +31,7 @@ public class FacultyController {
 
     @GetMapping("{id}")
     public FacultyRecord findFaculty(@PathVariable Long id) {
-       return facultyService.findFaculty(id);
+        return facultyService.findFaculty(id);
     }
 
     @GetMapping(params = "color")
