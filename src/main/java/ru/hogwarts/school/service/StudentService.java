@@ -198,22 +198,20 @@ public class StudentService {
 
     public void getSynchronizedThreads() {
         logger.info("SynchronizedThreads");
-        operation(0);
-        operation(1);
-        new Thread(() -> {
-            operation(2);
-            operation(3);
-        }).start();
-        new Thread(() -> {
-            operation(4);
-            operation(5);
-        }).start();
-    }
-
-    private synchronized void operation(int key) {
         List<StudentRecord> students = studentRepository.findAll().stream()
                 .map(recordMapper::toRecord)
                 .toList();
-        System.out.println(students.get(key).getName());
+        operation(students, 0, 1);
+        new Thread(() -> {
+            operation(students, 2, 3);
+        }).start();
+        new Thread(() -> {
+            operation(students, 4, 5);
+        }).start();
+    }
+
+    private synchronized void operation(List<StudentRecord> students, int key1, int key2) {
+        System.out.println(students.get(key1).getName());
+        System.out.println(students.get(key2).getName());
     }
 }
