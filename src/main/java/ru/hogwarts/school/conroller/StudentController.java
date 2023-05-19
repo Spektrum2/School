@@ -18,7 +18,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public StudentRecord createStudent(@RequestBody StudentRecord studentRecord) {
+    public StudentRecord createStudent(@RequestBody @Valid StudentRecord studentRecord) {
         return studentService.createStudent(studentRecord);
     }
 
@@ -39,7 +39,7 @@ public class StudentController {
 
     @GetMapping(params = {"min", "max"})
     public Collection<StudentRecord> findByAgeBetween(@RequestParam Integer min,
-                                                     @RequestParam Integer max) {
+                                                      @RequestParam Integer max) {
         return studentService.findByAgeBetween(min, max);
     }
 

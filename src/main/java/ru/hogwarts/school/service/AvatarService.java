@@ -37,6 +37,12 @@ public class AvatarService {
         this.avatarRepository = avatarRepository;
     }
 
+    /**
+     * Метод для загрузки аватара студента в БД
+     *
+     * @param multipartFile фотография
+     *
+     */
     public void uploadAvatar(MultipartFile multipartFile) throws IOException {
         logger.info("Was invoked method for upload avatar");
         byte[] data = multipartFile.getBytes();
@@ -53,6 +59,14 @@ public class AvatarService {
         avatarRepository.save(avatar);
     }
 
+    /**
+     * Метод создает аватар
+     *
+     * @param size размер аватара
+     * @param contentType тип фотграфии
+     * @param data массив байтов файла
+     * @return возвращает аватар
+     */
     private Avatar create(long size, String contentType, byte[] data) {
         logger.info("Was invoked method for create avatar");
         Avatar avatar = new Avatar();
@@ -62,6 +76,12 @@ public class AvatarService {
         return avatarRepository.save(avatar);
     }
 
+    /**
+     * Метод  возвращает картинку из БД
+     *
+     * @param id id фотографии
+     * @return возвращает pair
+     */
     public Pair<String, byte[]> readAvatarFromDb(long id) {
         logger.info("Was invoked method for read avatar from db");
         Avatar avatar = avatarRepository.findById(id)
@@ -72,6 +92,12 @@ public class AvatarService {
         return Pair.of(avatar.getMediaType(), avatar.getData());
     }
 
+    /**
+     * Метод возвращает картинку из директории
+     *
+     * @param id id фотографии
+     * @return возвращает pair
+     */
     public Pair<String, byte[]> readAvatarFromFs(long id) throws IOException {
         logger.info("Was invoked method for read avatar from fs");
         Avatar avatar = avatarRepository.findById(id)
@@ -82,6 +108,13 @@ public class AvatarService {
         return Pair.of(avatar.getMediaType(), Files.readAllBytes(Paths.get(avatar.getFilePath())));
     }
 
+    /**
+     * Пагинация для репозитория AvatarRepository (получать списки аватарок постранично)
+     *
+     * @param pageNumber - номер страницы
+     * @param pageSize размер страницы
+     * @return возвращает списки аватарок постранично
+     */
     public Collection<AvatarRecord> readAllAvatar(int pageNumber, int pageSize) {
         logger.info("Was invoked method for get all avatars page by page");
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);

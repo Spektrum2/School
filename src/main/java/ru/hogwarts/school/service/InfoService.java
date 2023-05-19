@@ -14,11 +14,23 @@ public class InfoService {
     @Value("${server.port}")
     private int port;
 
+    /**
+     * Метод возвращает порт, на котором запущено приложение
+     *
+     * @return возвращает порт, на котором запущено приложение
+     */
     public String getPort() {
         logger.debug("Server port request");
         return "Server port = " + port;
     }
 
+    /**
+     * Создать эндпоинт (не важно в каком контроллере), который будет возвращать целочисленное значение.
+     * Это значение вычисляется следующей формулой:int sum = Stream.iterate(1, a -> a +1).limit(1_000_000).reduce(0, (a, b) -> a + b );
+     * Необходимо придумать способ уменьшить время ответа эндпоинта путем модификации вышеописанного выражения.
+     *
+     * @return возвращает целочисленное значение
+     */
     @TrackExecutionTime
     public Integer getNumber() {
         return Stream.iterate(1, a -> a + 1)

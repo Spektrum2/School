@@ -27,6 +27,11 @@ public class FacultyService {
         this.recordMapper = recordMapper;
     }
 
+    /**
+     * Метод для получения списка всех факультетов
+     *
+     * @return возвращает список факультетов
+     */
     public Collection<FacultyRecord> getAllFaculty() {
         logger.info("Was invoked method for get all faculties");
         return facultyRepository.findAll().stream()
@@ -34,11 +39,23 @@ public class FacultyService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Метод для создания факультета
+     *
+     * @param facultyRecord факультет
+     * @return возвращает факультет
+     */
     public FacultyRecord createFaculty(FacultyRecord facultyRecord) {
         logger.info("Was invoked method for create faculty");
         return recordMapper.toRecord(facultyRepository.save(recordMapper.toEntity(facultyRecord)));
     }
 
+    /**
+     * Метод для посиска факультета по id
+     *
+     * @param id id факультета
+     * @return возвращает факультет
+     */
     public FacultyRecord findFaculty(long id) {
         logger.info("Was invoked method  for find faculty");
         return recordMapper.toRecord(facultyRepository.findById(id)
@@ -48,6 +65,13 @@ public class FacultyService {
                 }));
     }
 
+    /**
+     * Метод для обновления факультета
+     *
+     * @param id id факультета
+     * @param facultyRecord факультет
+     * @return возвращает факультет
+     */
     public FacultyRecord editFaculty(long id, FacultyRecord facultyRecord) {
         logger.info("Was invoked method for edit faculty");
         Faculty oldFaculty = facultyRepository.findById(id)
@@ -60,6 +84,12 @@ public class FacultyService {
         return recordMapper.toRecord(facultyRepository.save(oldFaculty));
     }
 
+    /**
+     * Метод для удаления факультета
+     *
+     * @param id id факультета
+     * @return возвращает факультет
+     */
     public FacultyRecord deleteFaculty(long id) {
         logger.info("Was invoked method for delete faculty");
         Faculty faculty = facultyRepository.findById(id)
@@ -71,6 +101,12 @@ public class FacultyService {
         return recordMapper.toRecord(faculty);
     }
 
+    /**
+     * Метод ищет факультет по цвету
+     *
+     * @param color цвет факультета
+     * @return возвращает список факультетов
+     */
     public Collection<FacultyRecord> findByColor(String color) {
         logger.info("Was invoked method for find faculty by color");
         return facultyRepository.findByColor(color).stream()
@@ -78,6 +114,12 @@ public class FacultyService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Метод для поиска факультета по имени или цвету, игнорируя регистр
+     *
+     * @param nameOrColor - имя или цвет
+     * @return список факультетов
+     */
     public Collection<FacultyRecord> findByNameOrColor(String nameOrColor) {
         logger.info("Was invoked method for find faculty by name or color ");
         return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(nameOrColor, nameOrColor).stream()
@@ -85,6 +127,12 @@ public class FacultyService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Метод для поиска студентов по факультету
+     *
+     * @param id id факультета
+     * @return возвращает список студентов
+     */
     public Collection<StudentRecord> findStudentsByFaculty(long id) {
         logger.info("Was invoked method for get students by faculty");
         return facultyRepository.findById(id)
@@ -99,6 +147,12 @@ public class FacultyService {
                     return new FacultyNotFoundException(id);
                 });
     }
+
+    /**
+     * Метод для поиска самого длиного имя факультета
+     *
+     * @return возвращает имя факультета
+     */
     @TrackExecutionTime
     public String getTheLongestNameOfFaculty() {
         return facultyRepository.findAll().stream()
