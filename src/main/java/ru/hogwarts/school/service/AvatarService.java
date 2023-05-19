@@ -111,7 +111,7 @@ public class AvatarService {
     /**
      * Пагинация для репозитория AvatarRepository (получать списки аватарок постранично)
      *
-     * @param pageNumber - номер страницы
+     * @param pageNumber номер страницы
      * @param pageSize размер страницы
      * @return возвращает списки аватарок постранично
      */
